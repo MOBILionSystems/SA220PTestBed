@@ -86,9 +86,9 @@ namespace
     ViReal64 const sampleInterval = 1.0 / sampleRate;
     ViInt64 const recordSize = 5120;
     ViInt32 const streamingMode = AQMD3_VAL_STREAMING_MODE_TRIGGERED;
-    ViInt32 const acquisitionMode = AQMD3_VAL_ACQUISITION_MODE_NORMAL;
+    ViInt32 const acquisitionMode = AQMD3_VAL_ACQUISITION_MODE_AVERAGER;
     ViInt32 const dataReductionMode = AQMD3_VAL_ACQUISITION_DATA_REDUCTION_MODE_ZERO_SUPPRESS;
-    ViInt32 const nbrOfAverages = 3;
+    ViInt32 const nbrOfAverages = 10;
 
     // Channel configuration parameters
     ViConstString channel = "Channel1";
@@ -124,7 +124,7 @@ namespace
     ViInt64 const nbrAcquisitionElements = maxRecordsToProcessAtOnce * recordSize / nbrSamplesPerElement;
 
     // Streaming session parameters
-    seconds streamingDuration = seconds(5);
+    seconds streamingDuration = seconds(2);
 
     /*wait-time before a new attempt of read operation.
       NOTE: Please tune according to your system input (trigger rate & number of peaks)*/
