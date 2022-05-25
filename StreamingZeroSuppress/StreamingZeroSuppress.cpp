@@ -96,19 +96,20 @@ namespace
     ViReal64 const channelOffset = 0.24;
     ViInt32 const coupling = AQMD3_VAL_VERTICAL_COUPLING_DC;
 
-    /// @brief The pulse polarity used for baseline correction.
-  /// @brief Indicates whether or not baseline correction should be activated.
+    // Baseline correction configuration
     ViInt32 baseline_stabilize_enable = 1;
     ViInt32 pulse_polarity = AQMD3_VAL_BASELINE_CORRECTION_PULSE_POLARITY_POSITIVE;
-    /// @brief Baseline pulse detection threshold.
     ViInt32 pulse_threshold = 200;
-    /// @brief Digital offset applied after baseline correction.
     ViInt32 digital_offset = -31456;
-    /// @brief The baseline correction mode to employ.
     ViInt32 baseline_mode = AQMD3_VAL_BASELINE_CORRECTION_MODE_BETWEEN_ACQUISITIONS;
+    
+    // nsa configuration
+    ViInt32 nsa_enable = 1;
+    ViInt32 nsa_threshold = -29706;
+    ViInt32 nsa_noisebase = 0;
 
     // Channel ZeroSuppress configuration parameters
-    ViInt32 const zsThreshold = -29706;
+    ViInt32 const zsThreshold = nsa_threshold;
     ViInt32 const zsHysteresis = 100;
     ViInt32 const zsPreGateSamples = 0;
     ViInt32 const zsPostGateSamples = 0;
@@ -240,12 +241,20 @@ int main()
         // Configure baseline correction
         if (baseline_stabilize_enable != 0) {
             cout << "Setting up baseline correction" << std::endl;
-            cout << "baseline mode: " << baseline_mode << std::endl;
-            cout << "baseline pulse threshold: " << pulse_threshold << std::endl;
-            cout << "baseline pulse polarity: " << pulse_polarity << std::endl;
-            cout << "baseline digital offset: " << digital_offset << std::endl;
+            cout << "  baseline mode: " << baseline_mode << std::endl;
+            cout << "  baseline pulse threshold: " << pulse_threshold << std::endl;
+            cout << "  baseline pulse polarity: " << pulse_polarity << std::endl;
+            cout << "  baseline digital offset: " << digital_offset << std::endl;
             checkApiCall(AqMD3_ChannelBaselineCorrectionConfigure(session, "Channel1", baseline_mode, pulse_threshold,
                 pulse_polarity, digital_offset));
+            if (nsa_enable != 0) {
+                cout << "Setting up nsa" << std::endl;
+                cout << "  nsa threshold: " << nsa_threshold << std::endl;
+                cout << "  nsa noisebase: " << nsa_noisebase << std::endl;
+                checkApiCall(AqMD3_SetAttributeViBoolean(session, "Channel1", AQMD3_ATTR_NSA_ENABLED, VI_TRUE));
+                checkApiCall(AqMD3_SetAttributeViInt32(session, "Channel1", AQMD3_ATTR_NSA_THRESHOLD, nsa_threshold));
+                checkApiCall(AqMD3_SetAttributeViInt32(session, "Channel1", AQMD3_ATTR_NSA_NOISE_BASE, nsa_noisebase));
+            }
         }
 
         // Configure ZeroSuppress
