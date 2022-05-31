@@ -64,12 +64,13 @@ void SA220P::configure()
 
     if (baseline_stabilize_enable != 0) {
         cout << "Setting up baseline correction" << std::endl;
+        cout << "baseline mode: " << baseline_mode << std::endl;
+        cout << "baseline pulse threshold: " << pulse_threshold << std::endl;
+        cout << "baseline pulse polarity: " << pulse_polarity << std::endl;
+        cout << "baseline digital offset: " << digital_offset << std::endl;
         checkApiCall(AqMD3_ChannelBaselineCorrectionConfigure(session, "Channel1", baseline_mode, pulse_threshold,
             pulse_polarity, digital_offset));
-        checkApiCall(AqMD3_ChannelBaselineCorrectionConfigure(session, "Channel2", baseline_mode, pulse_threshold,
-            pulse_polarity, digital_offset));
     }
-
 
     // Configure the trigger.
     cout << "\nConfiguring trigger\n";
