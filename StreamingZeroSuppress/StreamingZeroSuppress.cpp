@@ -86,7 +86,7 @@ namespace
     ViReal64 const sampleInterval = 1.0 / sampleRate;
     ViInt64 const recordSize = 5120;
     ViInt32 const streamingMode = AQMD3_VAL_STREAMING_MODE_TRIGGERED;
-    ViInt32 const acquisitionMode = AQMD3_VAL_ACQUISITION_MODE_AVERAGER;
+    ViInt32 const acquisitionMode = AQMD3_VAL_ACQUISITION_MODE_NORMAL;
     ViInt32 const dataReductionMode = AQMD3_VAL_ACQUISITION_DATA_REDUCTION_MODE_ZERO_SUPPRESS;
     ViInt32 const nbrOfAverages = 10;
 
@@ -247,7 +247,7 @@ int main()
             cout << "  baseline digital offset: " << digital_offset << std::endl;
             checkApiCall(AqMD3_ChannelBaselineCorrectionConfigure(session, "Channel1", baseline_mode, pulse_threshold,
                 pulse_polarity, digital_offset));
-            if (nsa_enable != 0) {
+            if (acquisitionMode == AQMD3_VAL_ACQUISITION_MODE_AVERAGER && nsa_enable != 0) {
                 cout << "Setting up nsa" << std::endl;
                 cout << "  nsa threshold: " << nsa_threshold << std::endl;
                 cout << "  nsa noisebase: " << nsa_noisebase << std::endl;
